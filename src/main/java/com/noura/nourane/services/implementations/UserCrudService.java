@@ -1,5 +1,4 @@
 package com.noura.nourane.services.implementations;
-
 import com.noura.nourane.models.entities.Doctor;
 import com.noura.nourane.models.entities.Patient;
 import com.noura.nourane.models.entities.User;
@@ -15,9 +14,9 @@ import java.util.Optional;
 
 @Service
 public class UserCrudService implements UserCrudServiceInterface {
-    private UserRepository userRepository;
-    private DoctorRepository doctorRepository;
-    private PatientRepository patientRepository;
+    private final UserRepository userRepository;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
     @Autowired
     public UserCrudService(UserRepository userRepository, DoctorRepository doctorRepository,
                            PatientRepository patientRepository)
@@ -44,7 +43,7 @@ public class UserCrudService implements UserCrudServiceInterface {
         return this.userRepository.save(user);
     }
 
-    public Optional<Doctor, Patient> findById(Long id)
+    public Optional<? extends User> findById(Long id)
     {
         Optional<User> user = userRepository.findById(id);
         if(user.isPresent())
@@ -54,8 +53,12 @@ public class UserCrudService implements UserCrudServiceInterface {
             {
                 return patientRepository.findById(userEntity.getId());
             }
+            if(userEntity.getTypeUser().equals("doctor"))
+            {
+                return doctorRepository.findById(userEntity.getId());
+            }
         }
-        return null;
+        return user;
     }
 
     @Override
@@ -65,11 +68,13 @@ public class UserCrudService implements UserCrudServiceInterface {
 
     @Override
     public User update(Long id, User user) {
+
         return null;
     }
 
     @Override
     public void delete(Long id) {
-
+        Optional<User> user = userRepository.findById(id);
+        user.ifPresent(userRepository::delete);
     }
 }

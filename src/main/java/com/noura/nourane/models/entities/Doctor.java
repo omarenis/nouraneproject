@@ -14,5 +14,5 @@ import java.util.List;
 @AllArgsConstructor
 public class Doctor extends User {
     @Column(name = "speciality") @Getter @Setter @NotNull private String speciality;
-    @OneToMany List<Appointment> appointments;
+    @OneToMany @Getter @Setter List<Availability>  availabilities;
 }
