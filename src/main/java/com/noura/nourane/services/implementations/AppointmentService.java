@@ -45,7 +45,6 @@ public class AppointmentService implements AppointmentServiceInterface {
             Optional<Doctor> doctor = doctorRepository.findById(user);
             if(doctor.isPresent())
             {
-
             }
         }
     }
